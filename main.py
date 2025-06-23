@@ -37,11 +37,12 @@ line = "-" * 40
 texts_count = len(TEXTS)
 
 #   Check if the user is registered.
-uzivatele = {"bob": "123", 
-             "ann": "pass123", 
-             "mike": "password123", 
-             "liz": "pass123"
-             }
+users = {
+        "bob": "123", 
+        "ann": "pass123", 
+        "mike": "password123", 
+        "liz": "pass123"
+}
 
 username = str(input("username: "))
 password = str(input("password: "))
@@ -71,83 +72,62 @@ else:
 
 selected_text = TEXTS[text_number-1]
 
-#   spliting the text to single words
+#   Loop Variables
+title_count = 0
+upper_count = 0
+lower_count = 0
+number_count = 0
+number_list = []
+words_len = {}
+
+#   Spliting the text to single words
 raw_words = selected_text.split()
-
-words = []
-
 for raw_word in raw_words:
     word = raw_word.strip(".,")
-    words.append(word)
 
-#   counting the words
-text_len = len(words)
-print(f"There are {text_len} words in the selected text.")
-
-#   počet slov začínajících velkým písmenem
-title_count = 0
-
-for word in words:
+#   Number of words starting with a capital letter
     if word.istitle():
         title_count += 1
 
-print(f"There are {title_count} titlecase words.")
-
-#   počet slov psaných velkými písmeny
-upper_count = 0
-
-for word in words:
-    if word.isupper():
+#   Number of words written in capital letters
+    elif word.isupper():
         upper_count += 1
-
-print(f"There are {upper_count} uppercase words.")
-
-#   počet slov psaných malými písmeny
-lower_count = 0
-
-for word in words:
-    if word.islower():
+    
+#   Number of words written in lowercase letters
+    elif word.islower():
         lower_count += 1
 
-print(f"There are {lower_count} lowercase words.")
-
-#   počet čísel (ne cifer)
-number_count = 0
-
-for word in words:
-    if word.isnumeric():
+#   Number of numbers (not digits)
+    elif word.isnumeric():
         number_count += 1
-
-print(f"There are {number_count} numeric strings.")
-
-#   sumu všech čísel (ne cifer) v textu
-number_list = []
-
-for word in words:
-    if word.isnumeric():
         number_list.append(int(word))
 
-number_sum = sum(number_list)
-print(f"The sum of all the numbers {number_sum}")
-
-#   Hlavička grafu
-
-print(line)
-print("LEN|  OCCURENCES  |NR.")
-print(line)
-
-#TODO   Program zobrazí jednoduchý sloupcový graf
-
-words_len = {}
-
-for word in words:
+#   Frequency of word lengths
     if len(word) not in words_len:
         words_len[len(word)] = 1
     else:
         words_len[len(word)] += 1
 
+#   Counting the words
+text_len = len(raw_words)
+print(f"There are {text_len} words in the selected text.")
+print(f"There are {title_count} titlecase words.")
+print(f"There are {upper_count} uppercase words.")
+print(f"There are {lower_count} lowercase words.")
+print(f"There are {number_count} numeric strings.")
+
+#   Sum of all numbers (not digits) in the text
+number_sum = sum(number_list)
+print(f"The sum of all the numbers {number_sum}")
+
+#   Chart header
+print(line)
+print("LEN|  OCCURENCES  |NR.")
+print(line)
+
+#   Simple bar chart
 sorted_words_len = sorted(words_len)
 for key in sorted_words_len:
     value = words_len.get(key)
     star_count = "*" * value
-    print(f"{key:<2}|{star_count:<25} |{value}")
+    print(f"{key:<2}|{star_count:<20} |{value}")
