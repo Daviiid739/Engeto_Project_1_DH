@@ -4,8 +4,10 @@ projekt_1.py: první projekt do Engeto Online Python Akademie
 author: David Horák
 email: daviiid739@gmail.com
 """
-#   Variables
 
+import sys
+
+#   Variables
 TEXTS = [
     '''Situated about 10 miles west of Kemmerer,
     Fossil Butte is a ruggedly impressive
@@ -35,8 +37,6 @@ TEXTS = [
 ]
 line = "-" * 40
 texts_count = len(TEXTS)
-
-#   Check if the user is registered.
 users = {
         "bob": "123", 
         "ann": "pass123", 
@@ -44,33 +44,37 @@ users = {
         "liz": "pass123"
 }
 
-username = str(input("username: "))
-password = str(input("password: "))
 
-if username in uzivatele.keys() and password == uzivatele.get(username):
+#   Check if the user is registered.
+username = input("username: ")
+password = input("password: ")
+
+if username in users.keys() and password == users.get(username):
     print(line)
     print(f"Welcome to the app, {username}\nWe have {texts_count} texts to be analyzed.")
     print(line)
 
 else:
     print("unregistered user, terminating the program..")
-    quit()
+    sys.exit()    
+
 
 #   Select texts
 text_number = input(f"Enter a number btw. 1 and {texts_count} to select: ")
 print(line)
 
-if text_number.isnumeric():
+if text_number.isdecimal():
     text_number = int(text_number)
     if text_number > texts_count or text_number <= 0:
         print(f"Number {text_number} is not in range between 1 and {texts_count}.")
-        quit()
+        sys.exit()
 
 else:
     print(f"\"{text_number}\" is not a number.")
-    quit()
+    sys.exit()
 
 selected_text = TEXTS[text_number-1]
+
 
 #   Loop Variables
 title_count = 0
@@ -82,25 +86,26 @@ words_len = {}
 
 #   Spliting the text to single words
 raw_words = selected_text.split()
+
 for raw_word in raw_words:
-    word = raw_word.strip(".,")
+    word = raw_word.strip(".,;:!?()[]{}'\"")
 
 #   Number of words starting with a capital letter
     if word.istitle():
         title_count += 1
 
 #   Number of words written in capital letters
-    elif word.isupper():
+    if word.isupper():
         upper_count += 1
     
 #   Number of words written in lowercase letters
-    elif word.islower():
+    if word.islower():    
         lower_count += 1
 
 #   Number of numbers (not digits)
-    elif word.isnumeric():
+    if word.isnumeric():
         number_count += 1
-        number_list.append(int(word))
+        number_list.append(int(word))   
 
 #   Frequency of word lengths
     if len(word) not in words_len:
@@ -110,24 +115,28 @@ for raw_word in raw_words:
 
 #   Counting the words
 text_len = len(raw_words)
+
+#   Sum of all numbers (not digits) in the text
+number_sum = sum(number_list)
+
+#   Printing the results
 print(f"There are {text_len} words in the selected text.")
 print(f"There are {title_count} titlecase words.")
 print(f"There are {upper_count} uppercase words.")
 print(f"There are {lower_count} lowercase words.")
 print(f"There are {number_count} numeric strings.")
+print(f"The sum of all the numbers: {number_sum}")
 
-#   Sum of all numbers (not digits) in the text
-number_sum = sum(number_list)
-print(f"The sum of all the numbers {number_sum}")
 
 #   Chart header
 print(line)
-print("LEN|  OCCURENCES  |NR.")
+print(f"{"LEN":>3}|{"OCCURENCES".center(20)}|{"NR."}")
 print(line)
 
 #   Simple bar chart
 sorted_words_len = sorted(words_len)
+
 for key in sorted_words_len:
     value = words_len.get(key)
     star_count = "*" * value
-    print(f"{key:<2}|{star_count:<20} |{value}")
+    print(f"{key:>3}|{star_count:<20}|{value}")
