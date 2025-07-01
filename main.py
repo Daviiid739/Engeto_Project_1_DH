@@ -66,11 +66,11 @@ print(line)
 if text_number.isdecimal():
     text_number = int(text_number)
     if text_number > texts_count or text_number <= 0:
-        print(f"Number {text_number} is not in range between 1 and {texts_count}.")
+        print(f"Number {text_number} is not in range between 1 and {texts_count}.", "Terminating the program..", sep="\n")
         sys.exit()
 
 else:
-    print(f"\"{text_number}\" is not a number.")
+    print(f"Incorrect input. An integer btw. 1 and {texts_count} must be entered.", "Terminating the program..", sep="\n")
     sys.exit()
 
 selected_text = TEXTS[text_number-1]
